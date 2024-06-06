@@ -205,8 +205,7 @@ pub fn settings_setup(mut commands: Commands) {
         .ui_button("Audio", SettingsButton::Audio)
         .set_parent(navbar);
 
-    let settings = commands.ui_vlist().id();
-    commands.ui_label("a").set_parent(settings);
+    let settings = commands.ui_vlist().set_parent(list).id();
     commands.insert_resource(SettingsList(settings));
 
     commands

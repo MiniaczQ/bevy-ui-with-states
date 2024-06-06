@@ -32,7 +32,7 @@ impl<'w, 's> CommandsExtWidgets<'w> for Commands<'w, 's> {
                 height: Val::Auto,
                 justify_content: JustifyContent::Center,
                 align_items: AlignItems::Center,
-                flex_direction: FlexDirection::Row,
+                flex_direction: FlexDirection::Column,
                 row_gap: Val::Px(10.),
                 ..default()
             },
