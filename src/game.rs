@@ -18,7 +18,7 @@ pub fn game_setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn((
         StateScoped(GameState::Playing),
         SpriteBundle {
-            texture: asset_server.load("dwarf.png"),
+            texture: asset_server.load("square.png"),
             ..default()
         },
     ));
