@@ -86,10 +86,11 @@ pub fn loading_update(
 ) {
     if countdown.0 > 0 {
         countdown.0 -= 1;
-    } else {
+    }
+    if countdown.0 == 0 {
         next_state.set(GameState::Playing);
     }
-    info!("Loading: {}", countdown.0);
+    info!("Loading, frames left: {}", countdown.0);
 }
 
 pub fn loading_teardown(mut commands: Commands) {
