@@ -1,4 +1,6 @@
 use bevy::prelude::*;
+
+use super::{BUTTON_HOVER, BUTTON_NORMAL, BUTTON_PRESSED};
 pub struct MouseHoverPlugin;
 
 impl Plugin for MouseHoverPlugin {
@@ -7,30 +9,22 @@ impl Plugin for MouseHoverPlugin {
     }
 }
 
-const NORMAL_BUTTON: Color = Color::srgb(0.15, 0.15, 0.15);
-const HOVERED_BUTTON: Color = Color::srgb(0.25, 0.25, 0.25);
-const PRESSED_BUTTON: Color = Color::srgb(0.35, 0.75, 0.35);
-
-#[derive(Component)]
-pub struct MouseHover;
-
 fn update(
     mut interaction_query: Query<
-        (&Interaction, &mut UiImage),
-        (Changed<Interaction>, With<MouseHover>),
+        (&mut BackgroundColor, &Interaction),
+        (Changed<Interaction>, With<Button>),
     >,
 ) {
-    for (interaction, mut image) in &mut interaction_query {
-        let color = &mut image.color;
+    for (mut background, interaction) in &mut interaction_query {
         match *interaction {
             Interaction::Pressed => {
-                *color = PRESSED_BUTTON;
+                *background = BUTTON_PRESSED.into();
             }
             Interaction::Hovered => {
-                *color = HOVERED_BUTTON;
+                *background = BUTTON_HOVER.into();
             }
             Interaction::None => {
-                *color = NORMAL_BUTTON;
+                *background = BUTTON_NORMAL.into();
             }
         }
     }

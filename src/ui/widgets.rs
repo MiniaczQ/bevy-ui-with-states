@@ -1,9 +1,9 @@
 use bevy::{ecs::system::EntityCommands, prelude::*};
 
-use super::MouseHover;
+use super::BUTTON_NORMAL;
 
 /// Helper trait for creating common widgets.
-pub trait CommandsExtWidgets<'w> {
+pub trait MyWidgets<'w> {
     fn my_root(&mut self) -> EntityCommands;
     fn my_vertical(&mut self) -> EntityCommands;
     fn my_horizontal(&mut self) -> EntityCommands;
@@ -11,7 +11,7 @@ pub trait CommandsExtWidgets<'w> {
     fn my_label<I: Into<String>>(&mut self, text: I) -> EntityCommands;
 }
 
-impl<'w, 's> CommandsExtWidgets<'w> for Commands<'w, 's> {
+impl<'w, 's> MyWidgets<'w> for Commands<'w, 's> {
     fn my_root(&mut self) -> EntityCommands {
         self.spawn(NodeBundle {
             style: Style {
@@ -69,9 +69,9 @@ impl<'w, 's> CommandsExtWidgets<'w> for Commands<'w, 's> {
                         align_items: AlignItems::Center,
                         ..default()
                     },
+                    background_color: BackgroundColor(BUTTON_NORMAL),
                     ..default()
                 },
-                MouseHover,
                 comp,
             ))
             .id();
