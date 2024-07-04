@@ -9,12 +9,9 @@ impl Plugin for MouseHoverPlugin {
     }
 }
 
-fn update(
-    mut interaction_query: Query<
-        (&mut BackgroundColor, &Interaction),
-        (Changed<Interaction>, With<Button>),
-    >,
-) {
+type InteractiveFilter = (Changed<Interaction>, With<Button>);
+
+fn update(mut interaction_query: Query<(&mut BackgroundColor, &Interaction), InteractiveFilter>) {
     for (mut background, interaction) in &mut interaction_query {
         match *interaction {
             Interaction::Pressed => {
