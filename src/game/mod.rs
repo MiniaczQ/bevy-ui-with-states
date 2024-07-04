@@ -27,14 +27,14 @@ impl Plugin for GamePlugin {
 
 #[derive(SubStates, Debug, PartialEq, Hash, Eq, Clone, Default)]
 #[source(CoreState = CoreState::Game)]
-pub enum GameState {
+enum GameState {
     #[default]
     Loading,
     Playing,
 }
 
 #[derive(Resource)]
-pub struct GameAssets {
+struct GameAssets {
     pub player_image: Handle<Image>,
 }
 

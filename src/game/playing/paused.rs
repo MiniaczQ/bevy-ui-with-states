@@ -22,17 +22,17 @@ fn setup(mut commands: Commands) {
 
     commands.my_label("Paused").set_parent(list);
     commands
-        .my_button("Unpause", PauseButton::Unpause)
+        .my_button("Unpause", UiAction::Unpause)
         .set_parent(list);
     commands
-        .my_button("Main Menu", PauseButton::MainMenu)
+        .my_button("Main Menu", UiAction::MainMenu)
         .set_parent(list);
 }
 
 fn update(
     input: Res<ButtonInput<KeyCode>>,
     pause: Res<State<PauseState>>,
-    mut interaction_query: ButtonQuery<PauseButton>,
+    mut interaction_query: ButtonQuery<UiAction>,
     mut pause_next: ResMut<NextState<PauseState>>,
     mut core_next: ResMut<NextState<CoreState>>,
 ) {
@@ -46,15 +46,15 @@ fn update(
     for (interaction, button) in &mut interaction_query {
         if let Interaction::Pressed = interaction {
             match button {
-                PauseButton::Unpause => pause_next.set(PauseState::Unpaused),
-                PauseButton::MainMenu => core_next.set(CoreState::Menu),
+                UiAction::Unpause => pause_next.set(PauseState::Unpaused),
+                UiAction::MainMenu => core_next.set(CoreState::Menu),
             }
         }
     }
 }
 
 #[derive(Component, PartialEq, Eq)]
-enum PauseButton {
+enum UiAction {
     Unpause,
     MainMenu,
 }
