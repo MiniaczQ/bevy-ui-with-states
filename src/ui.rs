@@ -1,15 +1,18 @@
+//! Collection of UI helpers.
+
 use bevy::{ecs::system::EntityCommands, prelude::*};
 
+/// Helper trait for creating common widgets.
 pub trait CommandsExtWidgets<'w> {
-    fn ui_root_list(&mut self) -> EntityCommands;
-    fn ui_vlist(&mut self) -> EntityCommands;
-    fn ui_hlist(&mut self) -> EntityCommands;
-    fn ui_button<I: Into<String>, C: Component>(&mut self, text: I, comp: C) -> EntityCommands;
-    fn ui_label<I: Into<String>>(&mut self, text: I) -> EntityCommands;
+    fn my_root(&mut self) -> EntityCommands;
+    fn my_vertical(&mut self) -> EntityCommands;
+    fn my_horizontal(&mut self) -> EntityCommands;
+    fn my_button<I: Into<String>, C: Component>(&mut self, text: I, comp: C) -> EntityCommands;
+    fn my_label<I: Into<String>>(&mut self, text: I) -> EntityCommands;
 }
 
 impl<'w, 's> CommandsExtWidgets<'w> for Commands<'w, 's> {
-    fn ui_root_list(&mut self) -> EntityCommands {
+    fn my_root(&mut self) -> EntityCommands {
         self.spawn(NodeBundle {
             style: Style {
                 width: Val::Percent(100.),
@@ -25,7 +28,7 @@ impl<'w, 's> CommandsExtWidgets<'w> for Commands<'w, 's> {
         })
     }
 
-    fn ui_vlist(&mut self) -> EntityCommands {
+    fn my_vertical(&mut self) -> EntityCommands {
         self.spawn(NodeBundle {
             style: Style {
                 width: Val::Auto,
@@ -40,7 +43,7 @@ impl<'w, 's> CommandsExtWidgets<'w> for Commands<'w, 's> {
         })
     }
 
-    fn ui_hlist(&mut self) -> EntityCommands {
+    fn my_horizontal(&mut self) -> EntityCommands {
         self.spawn(NodeBundle {
             style: Style {
                 width: Val::Auto,
@@ -55,7 +58,7 @@ impl<'w, 's> CommandsExtWidgets<'w> for Commands<'w, 's> {
         })
     }
 
-    fn ui_button<I: Into<String>, C: Component>(&mut self, text: I, comp: C) -> EntityCommands {
+    fn my_button<I: Into<String>, C: Component>(&mut self, text: I, comp: C) -> EntityCommands {
         let button = self
             .spawn((
                 ButtonBundle {
@@ -68,6 +71,7 @@ impl<'w, 's> CommandsExtWidgets<'w> for Commands<'w, 's> {
                     },
                     ..default()
                 },
+                MouseHover,
                 comp,
             ))
             .id();
@@ -83,7 +87,7 @@ impl<'w, 's> CommandsExtWidgets<'w> for Commands<'w, 's> {
         self.entity(button)
     }
 
-    fn ui_label<I: Into<String>>(&mut self, text: I) -> EntityCommands {
+    fn my_label<I: Into<String>>(&mut self, text: I) -> EntityCommands {
         let label = self
             .spawn(ButtonBundle {
                 style: Style {
@@ -108,3 +112,43 @@ impl<'w, 's> CommandsExtWidgets<'w> for Commands<'w, 's> {
         self.entity(label)
     }
 }
+
+pub struct MouseHoverPlugin;
+
+impl Plugin for MouseHoverPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(Update, mouse_hover_update);
+    }
+}
+
+const NORMAL_BUTTON: Color = Color::srgb(0.15, 0.15, 0.15);
+const HOVERED_BUTTON: Color = Color::srgb(0.25, 0.25, 0.25);
+const PRESSED_BUTTON: Color = Color::srgb(0.35, 0.75, 0.35);
+
+#[derive(Component)]
+pub struct MouseHover;
+
+fn mouse_hover_update(
+    mut interaction_query: Query<
+        (&Interaction, &mut UiImage),
+        (Changed<Interaction>, With<MouseHover>),
+    >,
+) {
+    for (interaction, mut image) in &mut interaction_query {
+        let color = &mut image.color;
+        match *interaction {
+            Interaction::Pressed => {
+                *color = PRESSED_BUTTON;
+            }
+            Interaction::Hovered => {
+                *color = HOVERED_BUTTON;
+            }
+            Interaction::None => {
+                *color = NORMAL_BUTTON;
+            }
+        }
+    }
+}
+
+pub type ButtonQuery<'w, 's, 'a, T> =
+    Query<'w, 's, (&'a Interaction, &'a T), (Changed<Interaction>, With<Button>)>;
