@@ -9,9 +9,6 @@ pub fn plugin(app: &mut App) {
     app.enable_state_scoped_entities::<AppState>();
     app.add_systems(Update, bevy::dev_tools::states::log_transitions::<AppState>);
 
-    // Setup(s), update(s), teardown(s)
-    app.add_systems(Startup, setup);
-
     // Sub plugins
     app.add_plugins((loading::plugin, running::plugin));
 }

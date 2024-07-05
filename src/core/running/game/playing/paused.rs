@@ -1,10 +1,7 @@
 use bevy::prelude::*;
 use widgets::MyWidgets;
 
-use crate::{
-    core::{running::RunningState, AppState},
-    ui::*,
-};
+use crate::{core::running::RunningState, ui::*};
 
 use super::PauseState;
 

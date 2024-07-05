@@ -1,11 +1,9 @@
 mod credits;
 mod exit;
-mod menu;
 mod settings;
+mod title;
 
 use bevy::prelude::*;
-
-use crate::{core::AppState, ui::*};
 
 use super::RunningState;
 
@@ -20,7 +18,7 @@ pub(super) fn plugin(app: &mut App) {
 
     // Sub plugins
     app.add_plugins((
-        menu::plugin,
+        title::plugin,
         settings::plugin,
         credits::plugin,
         exit::plugin,
@@ -31,7 +29,7 @@ pub(super) fn plugin(app: &mut App) {
 #[source(RunningState = RunningState::Menu)]
 pub enum MenuState {
     #[default]
-    Main,
+    Title,
     Exit,
     Settings,
     Credits,

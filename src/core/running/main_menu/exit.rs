@@ -37,7 +37,7 @@ fn update(
                 UiAction::Yes => {
                     exit.send(AppExit::Success);
                 }
-                UiAction::No => next_menu_state.set(MenuState::Main),
+                UiAction::No => next_menu_state.set(MenuState::Title),
             }
         }
     }

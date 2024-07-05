@@ -35,7 +35,7 @@ pub fn update(
 ) {
     for (interaction, _) in &mut interaction_query {
         if interaction.just_released() {
-            next_menu_state.set(MenuState::Main)
+            next_menu_state.set(MenuState::Title)
         }
     }
 }

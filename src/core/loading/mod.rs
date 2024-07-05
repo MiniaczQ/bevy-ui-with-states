@@ -4,7 +4,7 @@ use bevy::prelude::*;
 
 use crate::{ui::widgets::MyWidgets, utility::barrier::*};
 
-use super::{AppState, GameAssets};
+use super::AppState;
 
 pub(super) fn plugin(app: &mut App) {
     // Setup(s), update(s), teardown(s)
@@ -57,6 +57,6 @@ fn minimum_load_time(
 
 fn done(mut next_app_state: ResMut<NextState<AppState>>, barrier: BarrierAwaiter<AppLoading>) {
     if barrier.is_completed() {
-        next_app_state.set(AppState::Playing);
+        next_app_state.set(AppState::Running);
     }
 }

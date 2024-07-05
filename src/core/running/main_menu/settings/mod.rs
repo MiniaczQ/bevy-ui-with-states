@@ -65,7 +65,7 @@ fn update(
     for (interaction, button) in &mut interaction_query {
         if interaction.just_released() {
             match button {
-                UiAction::Back => next_menu_state.set(MenuState::Main),
+                UiAction::Back => next_menu_state.set(MenuState::Title),
                 UiAction::Graphics => next_settings_state.set(SettingsState::Graphics),
                 UiAction::Controls => next_settings_state.set(SettingsState::Controls),
                 UiAction::Audio => next_settings_state.set(SettingsState::Audio),

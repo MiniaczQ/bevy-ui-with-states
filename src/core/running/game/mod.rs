@@ -3,7 +3,7 @@ mod playing;
 
 use bevy::prelude::*;
 
-use crate::core::AppState;
+use super::RunningState;
 
 pub(super) fn plugin(app: &mut App) {
     // State setup

@@ -1,13 +1,15 @@
 mod game;
-mod menu;
+mod main_menu;
 
 use bevy::prelude::*;
 
 use crate::ui;
 
+use super::AppState;
+
 pub fn plugin(app: &mut App) {
     // State setup
-    app.init_state::<RunningState>();
+    app.add_sub_state::<RunningState>();
     app.enable_state_scoped_entities::<RunningState>();
     app.add_systems(
         Update,
@@ -18,11 +20,12 @@ pub fn plugin(app: &mut App) {
     app.add_systems(Startup, setup);
 
     // Sub plugins
-    app.add_plugins((ui::plugin, menu::plugin, game::plugin));
+    app.add_plugins((ui::plugin, main_menu::plugin, game::plugin));
 }
 
 /// Core state of the application.
-#[derive(States, Debug, PartialEq, Hash, Eq, Clone, Default)]
+#[derive(SubStates, Debug, PartialEq, Hash, Eq, Clone, Default)]
+#[source(AppState = AppState::Running)]
 pub enum RunningState {
     #[default]
     Menu,

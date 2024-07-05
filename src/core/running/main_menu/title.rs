@@ -1,18 +1,20 @@
 use bevy::prelude::*;
-use widgets::MyWidgets;
 
-use crate::{core::AppState, ui::*};
+use crate::ui::{widgets::MyWidgets, ButtonQuery};
 
 use super::{MenuState, RunningState};
 
 pub(super) fn plugin(app: &mut App) {
     // Setup(s), update(s), teardown(s)
-    app.add_systems(OnEnter(MenuState::Main), setup);
-    app.add_systems(Update, update.run_if(in_state(MenuState::Main)));
+    app.add_systems(OnEnter(MenuState::Title), setup);
+    app.add_systems(Update, update.run_if(in_state(MenuState::Title)));
 }
 
 fn setup(mut commands: Commands) {
-    let list = commands.ui_root().insert(StateScoped(MenuState::Main)).id();
+    let list = commands
+        .ui_root()
+        .insert(StateScoped(MenuState::Title))
+        .id();
 
     commands
         .ui_button("Play")
