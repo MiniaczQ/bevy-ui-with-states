@@ -1,3 +1,3 @@
-# Bevy UI test using new state mechanics
+# About
 
-This is a test of `SubStates` and `StateScoped` in game-like scenarios.
+This project showcases how to structure a project when using substates.
