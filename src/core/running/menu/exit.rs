@@ -27,9 +27,9 @@ fn setup(mut commands: Commands) {
 }
 
 fn update(
-    mut menu_state: ResMut<NextState<MenuState>>,
-    mut exit: EventWriter<AppExit>,
+    mut next_menu_state: ResMut<NextState<MenuState>>,
     mut interaction_query: ButtonQuery<UiAction>,
+    mut exit: EventWriter<AppExit>,
 ) {
     for (interaction, button) in &mut interaction_query {
         if interaction.just_released() {
@@ -37,7 +37,7 @@ fn update(
                 UiAction::Yes => {
                     exit.send(AppExit::Success);
                 }
-                UiAction::No => menu_state.set(MenuState::Main),
+                UiAction::No => next_menu_state.set(MenuState::Main),
             }
         }
     }

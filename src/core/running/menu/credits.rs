@@ -30,12 +30,12 @@ pub fn setup(mut commands: Commands) {
 }
 
 pub fn update(
-    mut menu_state: ResMut<NextState<MenuState>>,
+    mut next_menu_state: ResMut<NextState<MenuState>>,
     mut interaction_query: ButtonQuery<UiAction>,
 ) {
     for (interaction, _) in &mut interaction_query {
         if interaction.just_released() {
-            menu_state.set(MenuState::Main)
+            next_menu_state.set(MenuState::Main)
         }
     }
 }

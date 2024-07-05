@@ -58,17 +58,17 @@ fn setup(mut commands: Commands) {
 }
 
 fn update(
-    mut menu_next: ResMut<NextState<MenuState>>,
-    mut settings_next: ResMut<NextState<SettingsState>>,
+    mut next_menu_state: ResMut<NextState<MenuState>>,
+    mut next_settings_state: ResMut<NextState<SettingsState>>,
     mut interaction_query: ButtonQuery<UiAction>,
 ) {
     for (interaction, button) in &mut interaction_query {
         if interaction.just_released() {
             match button {
-                UiAction::Back => menu_next.set(MenuState::Main),
-                UiAction::Graphics => settings_next.set(SettingsState::Graphics),
-                UiAction::Controls => settings_next.set(SettingsState::Controls),
-                UiAction::Audio => settings_next.set(SettingsState::Audio),
+                UiAction::Back => next_menu_state.set(MenuState::Main),
+                UiAction::Graphics => next_settings_state.set(SettingsState::Graphics),
+                UiAction::Controls => next_settings_state.set(SettingsState::Controls),
+                UiAction::Audio => next_settings_state.set(SettingsState::Audio),
             }
         }
     }

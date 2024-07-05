@@ -1,7 +1,10 @@
 use bevy::prelude::*;
 use widgets::MyWidgets;
 
-use crate::{core::CoreState, ui::*};
+use crate::{
+    core::{running::RunningState, AppState},
+    ui::*,
+};
 
 use super::PauseState;
 
@@ -30,14 +33,14 @@ fn setup(mut commands: Commands) {
 
 fn update(
     mut interaction_query: ButtonQuery<UiAction>,
-    mut pause_next: ResMut<NextState<PauseState>>,
-    mut core_next: ResMut<NextState<CoreState>>,
+    mut next_pause_state: ResMut<NextState<PauseState>>,
+    mut next_running_state: ResMut<NextState<RunningState>>,
 ) {
     for (interaction, button) in &mut interaction_query {
         if interaction.just_released() {
             match button {
-                UiAction::Unpause => pause_next.set(PauseState::Unpaused),
-                UiAction::MainMenu => core_next.set(CoreState::Menu),
+                UiAction::Unpause => next_pause_state.set(PauseState::Unpaused),
+                UiAction::MainMenu => next_running_state.set(RunningState::Menu),
             }
         }
     }

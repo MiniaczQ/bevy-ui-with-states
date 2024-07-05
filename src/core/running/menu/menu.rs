@@ -1,37 +1,14 @@
-mod credits;
-mod exit;
-mod settings;
-
 use bevy::prelude::*;
 use widgets::MyWidgets;
 
-use crate::{core::CoreState, ui::*};
+use crate::{core::AppState, ui::*};
+
+use super::{MenuState, RunningState};
 
 pub(super) fn plugin(app: &mut App) {
-    // State setup
-    app.add_sub_state::<MenuState>();
-    app.enable_state_scoped_entities::<MenuState>();
-    app.add_systems(
-        Update,
-        bevy::dev_tools::states::log_transitions::<MenuState>,
-    );
-
     // Setup(s), update(s), teardown(s)
     app.add_systems(OnEnter(MenuState::Main), setup);
     app.add_systems(Update, update.run_if(in_state(MenuState::Main)));
-
-    // Sub plugins
-    app.add_plugins((settings::plugin, credits::plugin, exit::plugin));
-}
-
-#[derive(SubStates, Debug, PartialEq, Hash, Eq, Clone, Default)]
-#[source(CoreState = CoreState::Menu)]
-pub enum MenuState {
-    #[default]
-    Main,
-    Exit,
-    Settings,
-    Credits,
 }
 
 fn setup(mut commands: Commands) {
@@ -58,17 +35,17 @@ fn setup(mut commands: Commands) {
 }
 
 fn update(
-    mut core_state: ResMut<NextState<CoreState>>,
-    mut menu_state: ResMut<NextState<MenuState>>,
+    mut next_running_state: ResMut<NextState<RunningState>>,
+    mut next_menu_state: ResMut<NextState<MenuState>>,
     mut interaction_query: ButtonQuery<UiAction>,
 ) {
     for (interaction, button) in &mut interaction_query {
         if interaction.just_released() {
             match button {
-                UiAction::Play => core_state.set(CoreState::Game),
-                UiAction::Settings => menu_state.set(MenuState::Settings),
-                UiAction::Credits => menu_state.set(MenuState::Credits),
-                UiAction::Exit => menu_state.set(MenuState::Exit),
+                UiAction::Play => next_running_state.set(RunningState::Game),
+                UiAction::Settings => next_menu_state.set(MenuState::Settings),
+                UiAction::Credits => next_menu_state.set(MenuState::Credits),
+                UiAction::Exit => next_menu_state.set(MenuState::Exit),
             }
         }
     }

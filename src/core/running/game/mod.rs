@@ -3,7 +3,7 @@ mod playing;
 
 use bevy::prelude::*;
 
-use crate::core::CoreState;
+use crate::core::AppState;
 
 pub(super) fn plugin(app: &mut App) {
     // State setup
@@ -15,15 +15,15 @@ pub(super) fn plugin(app: &mut App) {
     );
 
     // Setup(s), update(s), teardown(s)
-    app.add_systems(OnEnter(CoreState::Game), setup);
-    app.add_systems(OnExit(CoreState::Game), teardown);
+    app.add_systems(OnEnter(RunningState::Game), setup);
+    app.add_systems(OnExit(RunningState::Game), teardown);
 
     // Sub plugins
     app.add_plugins((loading::plugin, playing::plugin));
 }
 
 #[derive(SubStates, Debug, PartialEq, Hash, Eq, Clone, Default)]
-#[source(CoreState = CoreState::Game)]
+#[source(RunningState = RunningState::Game)]
 enum GameState {
     #[default]
     Loading,

@@ -42,12 +42,12 @@ fn setup(mut commands: Commands, assets: Res<GameAssets>) {
 fn update(
     input: Res<ButtonInput<KeyCode>>,
     pause: Res<State<PauseState>>,
-    mut pause_next: ResMut<NextState<PauseState>>,
+    mut next_pause_state: ResMut<NextState<PauseState>>,
 ) {
     if input.just_pressed(KeyCode::Escape) {
         match pause.get() {
-            PauseState::Unpaused => pause_next.set(PauseState::Paused),
-            PauseState::Paused => pause_next.set(PauseState::Unpaused),
+            PauseState::Unpaused => next_pause_state.set(PauseState::Paused),
+            PauseState::Paused => next_pause_state.set(PauseState::Unpaused),
         }
     }
 }
