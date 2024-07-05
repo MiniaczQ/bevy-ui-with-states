@@ -36,16 +36,24 @@ pub enum MenuState {
 fn setup(mut commands: Commands) {
     let list = commands.my_root().insert(StateScoped(MenuState::Main)).id();
 
-    commands.my_button("Play", UiAction::Play).set_parent(list);
     commands
-        .my_button("Settings", UiAction::Settings)
+        .my_button("Play")
+        .insert(UiAction::Play)
         .set_parent(list);
     commands
-        .my_button("Credits", UiAction::Credits)
+        .my_button("Settings")
+        .insert(UiAction::Settings)
+        .set_parent(list);
+    commands
+        .my_button("Credits")
+        .insert(UiAction::Credits)
         .set_parent(list);
 
     #[cfg(not(target = "wasm"))]
-    commands.my_button("Exit", UiAction::Exit).set_parent(list);
+    commands
+        .my_button("Exit")
+        .insert(UiAction::Exit)
+        .set_parent(list);
 }
 
 fn update(

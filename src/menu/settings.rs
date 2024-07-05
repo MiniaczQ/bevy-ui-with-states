@@ -33,19 +33,25 @@ fn setup(mut commands: Commands) {
     let navbar = commands.my_horizontal().set_parent(list).id();
 
     commands
-        .my_button("Graphics", UiAction::Graphics)
+        .my_button("Graphics")
+        .insert(UiAction::Graphics)
         .set_parent(navbar);
     commands
-        .my_button("Controls", UiAction::Controls)
+        .my_button("Controls")
+        .insert(UiAction::Controls)
         .set_parent(navbar);
     commands
-        .my_button("Audio", UiAction::Audio)
+        .my_button("Audio")
+        .insert(UiAction::Audio)
         .set_parent(navbar);
 
     let settings = commands.my_vertical().set_parent(list).id();
     commands.insert_resource(SettingsList(settings));
 
-    commands.my_button("Back", UiAction::Back).set_parent(list);
+    commands
+        .my_button("Back")
+        .insert(UiAction::Back)
+        .set_parent(list);
 }
 
 fn update(

@@ -18,10 +18,12 @@ fn setup(mut commands: Commands) {
 
     commands.my_label("Paused").set_parent(list);
     commands
-        .my_button("Unpause", UiAction::Unpause)
+        .my_button("Unpause")
+        .insert(UiAction::Unpause)
         .set_parent(list);
     commands
-        .my_button("Main Menu", UiAction::MainMenu)
+        .my_button("Main Menu")
+        .insert(UiAction::MainMenu)
         .set_parent(list);
 }
 

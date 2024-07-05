@@ -19,7 +19,7 @@ pub fn setup(mut commands: Commands) {
     commands.my_label("Alice").set_parent(list);
     commands.my_label("Bob").set_parent(list);
 
-    commands.my_button("Back", UiAction).set_parent(list);
+    commands.my_button("Back").insert(UiAction).set_parent(list);
 }
 
 pub fn update(

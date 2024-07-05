@@ -2,7 +2,7 @@ use bevy::prelude::*;
 mod paused;
 mod unpaused;
 
-use super::GameState;
+use super::{GameAssets, GameState};
 
 pub(super) fn plugin(app: &mut App) {
     // Setup state
@@ -29,11 +29,11 @@ enum PauseState {
     Paused,
 }
 
-fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
+fn setup(mut commands: Commands, assets: Res<GameAssets>) {
     commands.spawn((
         StateScoped(GameState::Playing),
         SpriteBundle {
-            texture: asset_server.load("square.png"),
+            texture: assets.player_image.clone(),
             ..default()
         },
     ));

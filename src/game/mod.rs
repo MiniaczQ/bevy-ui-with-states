@@ -16,6 +16,7 @@ pub(super) fn plugin(app: &mut App) {
 
     // Setup, update, teardown
     app.add_systems(OnEnter(CoreState::Game), setup);
+    app.add_systems(OnExit(CoreState::Game), teardown);
 
     // Sub plugins
     app.add_plugins((loading::plugin, playing::plugin));
@@ -36,6 +37,10 @@ struct GameAssets {
 
 fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.insert_resource(GameAssets {
-        player_image: asset_server.load("square.png"),
+        player_image: asset_server.load("bevy.png"),
     });
+}
+
+fn teardown(mut commands: Commands) {
+    commands.remove_resource::<GameAssets>();
 }

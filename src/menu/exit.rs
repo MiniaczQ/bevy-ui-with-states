@@ -15,8 +15,14 @@ fn setup(mut commands: Commands) {
 
     commands.my_label("Exit?").set_parent(list);
 
-    commands.my_button("Yes", UiAction::Yes).set_parent(list);
-    commands.my_button("No", UiAction::No).set_parent(list);
+    commands
+        .my_button("Yes")
+        .insert(UiAction::Yes)
+        .set_parent(list);
+    commands
+        .my_button("No")
+        .insert(UiAction::No)
+        .set_parent(list);
 }
 
 fn update(
