@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use super::{GameAssets, GameState};
 
 pub(super) fn plugin(app: &mut App) {
-    // Setup, update, teardown
+    // Setup(s), update(s), teardown(s)
     app.add_systems(Update, update.run_if(in_state(GameState::Loading)));
 }
 

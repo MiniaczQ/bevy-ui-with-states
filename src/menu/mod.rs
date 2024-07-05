@@ -3,11 +3,12 @@ mod exit;
 mod settings;
 
 use bevy::prelude::*;
+use widgets::MyWidgets;
 
 use crate::{core::CoreState, ui::*};
 
 pub(super) fn plugin(app: &mut App) {
-    // Setup state
+    // State setup
     app.add_sub_state::<MenuState>();
     app.enable_state_scoped_entities::<MenuState>();
     app.add_systems(
@@ -15,7 +16,7 @@ pub(super) fn plugin(app: &mut App) {
         bevy::dev_tools::states::log_transitions::<MenuState>,
     );
 
-    // Setup, update, teardown
+    // Setup(s), update(s), teardown(s)
     app.add_systems(OnEnter(MenuState::Main), setup);
     app.add_systems(Update, update.run_if(in_state(MenuState::Main)));
 
@@ -34,24 +35,24 @@ pub enum MenuState {
 }
 
 fn setup(mut commands: Commands) {
-    let list = commands.my_root().insert(StateScoped(MenuState::Main)).id();
+    let list = commands.ui_root().insert(StateScoped(MenuState::Main)).id();
 
     commands
-        .my_button("Play")
+        .ui_button("Play")
         .insert(UiAction::Play)
         .set_parent(list);
     commands
-        .my_button("Settings")
+        .ui_button("Settings")
         .insert(UiAction::Settings)
         .set_parent(list);
     commands
-        .my_button("Credits")
+        .ui_button("Credits")
         .insert(UiAction::Credits)
         .set_parent(list);
 
     #[cfg(not(target = "wasm"))]
     commands
-        .my_button("Exit")
+        .ui_button("Exit")
         .insert(UiAction::Exit)
         .set_parent(list);
 }
@@ -62,7 +63,7 @@ fn update(
     mut interaction_query: ButtonQuery<UiAction>,
 ) {
     for (interaction, button) in &mut interaction_query {
-        if let Interaction::Pressed = interaction {
+        if interaction.just_released() {
             match button {
                 UiAction::Play => core_state.set(CoreState::Game),
                 UiAction::Settings => menu_state.set(MenuState::Settings),

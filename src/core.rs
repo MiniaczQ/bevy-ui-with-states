@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use crate::{game, menu, ui};
 
 pub fn plugin(app: &mut App) {
-    // Setup state
+    // State setup
     app.init_state::<CoreState>();
     app.enable_state_scoped_entities::<CoreState>();
     app.add_systems(
@@ -11,7 +11,7 @@ pub fn plugin(app: &mut App) {
         bevy::dev_tools::states::log_transitions::<CoreState>,
     );
 
-    // Setup, update, teardown
+    // Setup(s), update(s), teardown(s)
     app.add_systems(Startup, setup);
 
     // Sub plugins

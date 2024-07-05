@@ -1,11 +1,16 @@
+mod audio;
+mod controls;
+mod graphics;
+
 use bevy::prelude::*;
+use widgets::MyWidgets;
 
 use crate::ui::*;
 
 use super::MenuState;
 
 pub(super) fn plugin(app: &mut App) {
-    // Setup state
+    // State setup
     app.add_sub_state::<SettingsState>();
     app.enable_state_scoped_entities::<SettingsState>();
     app.add_systems(
@@ -13,43 +18,41 @@ pub(super) fn plugin(app: &mut App) {
         bevy::dev_tools::states::log_transitions::<SettingsState>,
     );
 
-    // Setup, update, teardown
+    // Setup(s), update(s), teardown(s)
     app.add_systems(OnEnter(MenuState::Settings), setup);
     app.add_systems(Update, update.run_if(in_state(MenuState::Settings)));
     app.add_systems(OnExit(MenuState::Settings), teardown);
 
     // Sub plugins
-    app.add_systems(OnEnter(SettingsState::Audio), setup_audio);
-    app.add_systems(OnEnter(SettingsState::Controls), setup_controls);
-    app.add_systems(OnEnter(SettingsState::Graphics), setup_graphics);
+    app.add_plugins((audio::plugin, controls::plugin, graphics::plugin));
 }
 
 fn setup(mut commands: Commands) {
     let list = commands
-        .my_root()
+        .ui_root()
         .insert(StateScoped(MenuState::Settings))
         .id();
 
-    let navbar = commands.my_horizontal().set_parent(list).id();
+    let navbar = commands.ui_horizontal().set_parent(list).id();
 
     commands
-        .my_button("Graphics")
-        .insert(UiAction::Graphics)
+        .ui_button("Graphics")
+        .insert((UiAction::Graphics, graphics::Marker))
         .set_parent(navbar);
     commands
-        .my_button("Controls")
-        .insert(UiAction::Controls)
+        .ui_button("Controls")
+        .insert((UiAction::Controls, controls::Marker))
         .set_parent(navbar);
     commands
-        .my_button("Audio")
-        .insert(UiAction::Audio)
+        .ui_button("Audio")
+        .insert((UiAction::Audio, audio::Marker))
         .set_parent(navbar);
 
-    let settings = commands.my_vertical().set_parent(list).id();
+    let settings = commands.ui_vertical().set_parent(list).id();
     commands.insert_resource(SettingsList(settings));
 
     commands
-        .my_button("Back")
+        .ui_button("Back")
         .insert(UiAction::Back)
         .set_parent(list);
 }
@@ -60,7 +63,7 @@ fn update(
     mut interaction_query: ButtonQuery<UiAction>,
 ) {
     for (interaction, button) in &mut interaction_query {
-        if let Interaction::Pressed = interaction {
+        if interaction.just_released() {
             match button {
                 UiAction::Back => menu_next.set(MenuState::Main),
                 UiAction::Graphics => settings_next.set(SettingsState::Graphics),
@@ -93,37 +96,4 @@ enum UiAction {
     Graphics,
     Controls,
     Audio,
-}
-
-fn setup_graphics(mut commands: Commands, root: Res<SettingsList>) {
-    let list = commands
-        .my_vertical()
-        .insert(StateScoped(SettingsState::Graphics))
-        .set_parent(root.0)
-        .id();
-
-    commands.my_label("Brightness").set_parent(list);
-    commands.my_label("Details").set_parent(list);
-}
-
-fn setup_controls(mut commands: Commands, root: Res<SettingsList>) {
-    let list = commands
-        .my_vertical()
-        .insert(StateScoped(SettingsState::Controls))
-        .set_parent(root.0)
-        .id();
-
-    commands.my_label("Forward").set_parent(list);
-    commands.my_label("Backward").set_parent(list);
-    commands.my_label("Attack").set_parent(list);
-}
-
-fn setup_audio(mut commands: Commands, root: Res<SettingsList>) {
-    let list = commands
-        .my_vertical()
-        .insert(StateScoped(SettingsState::Audio))
-        .set_parent(root.0)
-        .id();
-
-    commands.my_label("Volume").set_parent(list);
 }

@@ -2,6 +2,7 @@ mod core;
 mod game;
 mod menu;
 mod ui;
+mod utility;
 
 use bevy::prelude::*;
 

@@ -5,7 +5,7 @@ mod unpaused;
 use super::{GameAssets, GameState};
 
 pub(super) fn plugin(app: &mut App) {
-    // Setup state
+    // State setup
     app.add_sub_state::<PauseState>();
     app.enable_state_scoped_entities::<PauseState>();
     app.add_systems(
@@ -13,7 +13,7 @@ pub(super) fn plugin(app: &mut App) {
         bevy::dev_tools::states::log_transitions::<PauseState>,
     );
 
-    // Setup, update, teardown
+    // Setup(s), update(s), teardown(s)
     app.add_systems(OnEnter(GameState::Playing), setup);
     app.add_systems(Update, update.run_if(in_state(GameState::Playing)));
 

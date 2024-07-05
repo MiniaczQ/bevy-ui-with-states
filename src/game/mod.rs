@@ -6,7 +6,7 @@ use bevy::prelude::*;
 use crate::core::CoreState;
 
 pub(super) fn plugin(app: &mut App) {
-    // Setup state
+    // State setup
     app.add_sub_state::<GameState>();
     app.enable_state_scoped_entities::<GameState>();
     app.add_systems(
@@ -14,7 +14,7 @@ pub(super) fn plugin(app: &mut App) {
         bevy::dev_tools::states::log_transitions::<GameState>,
     );
 
-    // Setup, update, teardown
+    // Setup(s), update(s), teardown(s)
     app.add_systems(OnEnter(CoreState::Game), setup);
     app.add_systems(OnExit(CoreState::Game), teardown);
 
