@@ -2,30 +2,25 @@ mod credits;
 mod exit;
 mod settings;
 
-use bevy::{dev_tools::states::log_transitions, prelude::*};
-use credits::CreditsPlugin;
-use exit::ExitPlugin;
-use settings::SettingsPlugin;
+use bevy::prelude::*;
 
-use crate::{ui::*, CoreState};
+use crate::{core::CoreState, ui::*};
 
-pub struct MenuPlugin;
+pub(super) fn plugin(app: &mut App) {
+    // Setup state
+    app.add_sub_state::<MenuState>();
+    app.enable_state_scoped_entities::<MenuState>();
+    app.add_systems(
+        Update,
+        bevy::dev_tools::states::log_transitions::<MenuState>,
+    );
 
-impl Plugin for MenuPlugin {
-    fn build(&self, app: &mut App) {
-        // Setup state
-        app.add_sub_state::<MenuState>()
-            .enable_state_scoped_entities::<MenuState>();
-        #[cfg(debug_assertions)]
-        app.add_systems(Update, log_transitions::<MenuState>);
+    // Setup, update, teardown
+    app.add_systems(OnEnter(MenuState::Main), setup);
+    app.add_systems(Update, update.run_if(in_state(MenuState::Main)));
 
-        // Setup, update, teardown
-        app.add_systems(OnEnter(MenuState::Main), setup);
-        app.add_systems(Update, update.run_if(in_state(MenuState::Main)));
-
-        // Sub plugins
-        app.add_plugins((SettingsPlugin, CreditsPlugin, ExitPlugin));
-    }
+    // Sub plugins
+    app.add_plugins((settings::plugin, credits::plugin, exit::plugin));
 }
 
 #[derive(SubStates, Debug, PartialEq, Hash, Eq, Clone, Default)]

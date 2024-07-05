@@ -4,14 +4,10 @@ use crate::ui::*;
 
 use super::MenuState;
 
-pub struct ExitPlugin;
-
-impl Plugin for ExitPlugin {
-    fn build(&self, app: &mut App) {
-        // Setup, update, teardown
-        app.add_systems(OnEnter(MenuState::Exit), setup);
-        app.add_systems(Update, update.run_if(in_state(MenuState::Exit)));
-    }
+pub(super) fn plugin(app: &mut App) {
+    // Setup, update, teardown
+    app.add_systems(OnEnter(MenuState::Exit), setup);
+    app.add_systems(Update, update.run_if(in_state(MenuState::Exit)));
 }
 
 fn setup(mut commands: Commands) {

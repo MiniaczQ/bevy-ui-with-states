@@ -1,28 +1,24 @@
 mod loading;
 mod playing;
 
-use bevy::{dev_tools::states::log_transitions, prelude::*};
-use loading::LoadingPlugin;
-use playing::PlayingPlugin;
+use bevy::prelude::*;
 
-use crate::CoreState;
+use crate::core::CoreState;
 
-pub struct GamePlugin;
+pub(super) fn plugin(app: &mut App) {
+    // Setup state
+    app.add_sub_state::<GameState>();
+    app.enable_state_scoped_entities::<GameState>();
+    app.add_systems(
+        Update,
+        bevy::dev_tools::states::log_transitions::<GameState>,
+    );
 
-impl Plugin for GamePlugin {
-    fn build(&self, app: &mut App) {
-        // Setup state
-        app.add_sub_state::<GameState>()
-            .enable_state_scoped_entities::<GameState>();
-        #[cfg(debug_assertions)]
-        app.add_systems(Update, log_transitions::<GameState>);
+    // Setup, update, teardown
+    app.add_systems(OnEnter(CoreState::Game), setup);
 
-        // Setup, update, teardown
-        app.add_systems(OnEnter(CoreState::Game), setup);
-
-        // Sub plugins
-        app.add_plugins((LoadingPlugin, PlayingPlugin));
-    }
+    // Sub plugins
+    app.add_plugins((loading::plugin, playing::plugin));
 }
 
 #[derive(SubStates, Debug, PartialEq, Hash, Eq, Clone, Default)]

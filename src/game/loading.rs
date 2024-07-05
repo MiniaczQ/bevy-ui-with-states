@@ -2,12 +2,9 @@ use bevy::prelude::*;
 
 use super::{GameAssets, GameState};
 
-pub struct LoadingPlugin;
-
-impl Plugin for LoadingPlugin {
-    fn build(&self, app: &mut App) {
-        app.add_systems(Update, update.run_if(in_state(GameState::Loading)));
-    }
+pub(super) fn plugin(app: &mut App) {
+    // Setup, update, teardown
+    app.add_systems(Update, update.run_if(in_state(GameState::Loading)));
 }
 
 fn update(

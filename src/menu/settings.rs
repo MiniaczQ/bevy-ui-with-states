@@ -1,29 +1,27 @@
-use bevy::{dev_tools::states::log_transitions, prelude::*};
+use bevy::prelude::*;
 
 use crate::ui::*;
 
 use super::MenuState;
 
-pub struct SettingsPlugin;
+pub(super) fn plugin(app: &mut App) {
+    // Setup state
+    app.add_sub_state::<SettingsState>();
+    app.enable_state_scoped_entities::<SettingsState>();
+    app.add_systems(
+        Update,
+        bevy::dev_tools::states::log_transitions::<SettingsState>,
+    );
 
-impl Plugin for SettingsPlugin {
-    fn build(&self, app: &mut App) {
-        // Setup state
-        app.add_sub_state::<SettingsState>()
-            .enable_state_scoped_entities::<SettingsState>();
-        #[cfg(debug_assertions)]
-        app.add_systems(Update, log_transitions::<SettingsState>);
+    // Setup, update, teardown
+    app.add_systems(OnEnter(MenuState::Settings), setup);
+    app.add_systems(Update, update.run_if(in_state(MenuState::Settings)));
+    app.add_systems(OnExit(MenuState::Settings), teardown);
 
-        // Setup, update, teardown
-        app.add_systems(OnEnter(MenuState::Settings), setup);
-        app.add_systems(Update, update.run_if(in_state(MenuState::Settings)));
-        app.add_systems(OnExit(MenuState::Settings), teardown);
-
-        // Sub plugins
-        app.add_systems(OnEnter(SettingsState::Audio), setup_audio);
-        app.add_systems(OnEnter(SettingsState::Controls), setup_controls);
-        app.add_systems(OnEnter(SettingsState::Graphics), setup_graphics);
-    }
+    // Sub plugins
+    app.add_systems(OnEnter(SettingsState::Audio), setup_audio);
+    app.add_systems(OnEnter(SettingsState::Controls), setup_controls);
+    app.add_systems(OnEnter(SettingsState::Graphics), setup_graphics);
 }
 
 fn setup(mut commands: Commands) {

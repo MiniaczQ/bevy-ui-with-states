@@ -4,14 +4,10 @@ use crate::ui::*;
 
 use super::MenuState;
 
-pub struct CreditsPlugin;
-
-impl Plugin for CreditsPlugin {
-    fn build(&self, app: &mut App) {
-        // Setup, update, teardown
-        app.add_systems(OnEnter(MenuState::Credits), setup);
-        app.add_systems(Update, update.run_if(in_state(MenuState::Credits)));
-    }
+pub(super) fn plugin(app: &mut App) {
+    // Setup, update, teardown
+    app.add_systems(OnEnter(MenuState::Credits), setup);
+    app.add_systems(Update, update.run_if(in_state(MenuState::Credits)));
 }
 
 pub fn setup(mut commands: Commands) {

@@ -2,13 +2,9 @@ use bevy::prelude::*;
 
 use super::PauseState;
 
-pub struct UnpausedPlugin;
-
-impl Plugin for UnpausedPlugin {
-    fn build(&self, app: &mut App) {
-        // Setup, update, teardown
-        app.add_systems(Update, update.run_if(in_state(PauseState::Unpaused)));
-    }
+pub(super) fn plugin(app: &mut App) {
+    // Setup, update, teardown
+    app.add_systems(Update, update.run_if(in_state(PauseState::Unpaused)));
 }
 
 fn update(

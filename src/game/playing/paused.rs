@@ -1,17 +1,13 @@
 use bevy::prelude::*;
 
-use crate::{ui::*, CoreState};
+use crate::{core::CoreState, ui::*};
 
 use super::{GameState, PauseState};
 
-pub struct PausedPlugin;
-
-impl Plugin for PausedPlugin {
-    fn build(&self, app: &mut App) {
-        // Setup, update, teardown
-        app.add_systems(OnEnter(PauseState::Paused), setup);
-        app.add_systems(Update, update.run_if(in_state(GameState::Playing)));
-    }
+pub(super) fn plugin(app: &mut App) {
+    // Setup, update, teardown
+    app.add_systems(OnEnter(PauseState::Paused), setup);
+    app.add_systems(Update, update.run_if(in_state(GameState::Playing)));
 }
 
 fn setup(mut commands: Commands) {
