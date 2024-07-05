@@ -2,12 +2,12 @@ use bevy::prelude::*;
 
 use crate::{core::CoreState, ui::*};
 
-use super::{GameState, PauseState};
+use super::PauseState;
 
 pub(super) fn plugin(app: &mut App) {
     // Setup, update, teardown
     app.add_systems(OnEnter(PauseState::Paused), setup);
-    app.add_systems(Update, update.run_if(in_state(GameState::Playing)));
+    app.add_systems(Update, update.run_if(in_state(PauseState::Paused)));
 }
 
 fn setup(mut commands: Commands) {
@@ -26,19 +26,10 @@ fn setup(mut commands: Commands) {
 }
 
 fn update(
-    input: Res<ButtonInput<KeyCode>>,
-    pause: Res<State<PauseState>>,
     mut interaction_query: ButtonQuery<UiAction>,
     mut pause_next: ResMut<NextState<PauseState>>,
     mut core_next: ResMut<NextState<CoreState>>,
 ) {
-    if input.just_pressed(KeyCode::Escape) {
-        match pause.get() {
-            PauseState::Unpaused => pause_next.set(PauseState::Paused),
-            PauseState::Paused => pause_next.set(PauseState::Unpaused),
-        }
-    }
-
     for (interaction, button) in &mut interaction_query {
         if let Interaction::Pressed = interaction {
             match button {

@@ -15,6 +15,7 @@ pub(super) fn plugin(app: &mut App) {
 
     // Setup, update, teardown
     app.add_systems(OnEnter(GameState::Playing), setup);
+    app.add_systems(Update, update.run_if(in_state(GameState::Playing)));
 
     // Sub plugins
     app.add_plugins((unpaused::plugin, paused::plugin));
@@ -36,4 +37,17 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             ..default()
         },
     ));
+}
+
+fn update(
+    input: Res<ButtonInput<KeyCode>>,
+    pause: Res<State<PauseState>>,
+    mut pause_next: ResMut<NextState<PauseState>>,
+) {
+    if input.just_pressed(KeyCode::Escape) {
+        match pause.get() {
+            PauseState::Unpaused => pause_next.set(PauseState::Paused),
+            PauseState::Paused => pause_next.set(PauseState::Unpaused),
+        }
+    }
 }
