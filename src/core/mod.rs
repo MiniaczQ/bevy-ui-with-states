@@ -1,6 +1,9 @@
+mod game;
+mod menu;
+
 use bevy::prelude::*;
 
-use crate::{game, menu, ui};
+use crate::ui;
 
 pub fn plugin(app: &mut App) {
     // State setup
