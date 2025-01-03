@@ -1,3 +1,3 @@
 # About
 
-This project showcases how to structure a project when using substates.
+Prototype for using states to setup and teardown your UI screens and associated logic.
